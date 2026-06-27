@@ -83,9 +83,27 @@
   * {
     @apply border-border;
   }
+  html {
+    /* Stop mobile browsers from auto-resizing text unexpectedly. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Remove the 300ms tap delay and double-tap zoom on interactive elements
+     so taps register instantly on mobile (the main "clicks not working" fix). */
+  a,
+  button,
+  [role="button"],
+  label,
+  summary,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
   }
   /* Custom thin scrollbar for a premium feel */
   ::-webkit-scrollbar {

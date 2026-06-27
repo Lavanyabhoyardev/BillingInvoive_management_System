@@ -5,7 +5,7 @@
  * This makes the app load fully offline after the first visit. All business
  * data already lives in IndexedDB, so no API caching is needed.
  */
-const CACHE = "quotedesk-v1";
+const CACHE = "quotedesk-v2";
 const OFFLINE_URLS = ["/"];
 
 self.addEventListener("install", (event) => {

@@ -83,7 +83,10 @@ export function LoginScreen() {
       : "Your data syncs securely across all your devices.";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div
+      style={{ minHeight: "100dvh" }}
+      className="flex min-h-screen items-center justify-center bg-background px-4 py-8"
+    >
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
