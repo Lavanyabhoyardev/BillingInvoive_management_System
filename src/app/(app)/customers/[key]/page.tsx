@@ -95,7 +95,7 @@ export default function CustomerDetailPage() {
         />
         <StatCard
           index={1}
-          label="Total Invoices"
+          label="Total Invoices / Bills"
           value={customer.totalInvoices}
           icon={Receipt}
           accent="green"
@@ -128,12 +128,12 @@ export default function CustomerDetailPage() {
       {/* Invoices */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Invoices</CardTitle>
+          <CardTitle className="text-base">Invoices / Bills</CardTitle>
         </CardHeader>
         <CardContent>
           {invoices.length === 0 ? (
             <p className="py-6 text-center text-sm text-muted-foreground">
-              No invoices yet.
+              No invoices / bills yet.
             </p>
           ) : (
             <ul className="divide-y">

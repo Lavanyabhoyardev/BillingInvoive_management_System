@@ -47,7 +47,7 @@ export function InvoiceList({
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50 hover:bg-muted/50">
-              <TableHead>Invoice</TableHead>
+              <TableHead>Invoice / Bill</TableHead>
               <TableHead>Customer</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Amount</TableHead>

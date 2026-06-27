@@ -26,7 +26,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "New Quotation", href: ROUTES.newQuotation, icon: FilePlus2 },
   { label: "Quotations", href: ROUTES.quotations, icon: FileText },
   { label: "Drafts", href: ROUTES.drafts, icon: FileEdit },
-  { label: "Invoices", href: ROUTES.invoices, icon: Receipt },
+  { label: "Invoices / Bills", href: ROUTES.invoices, icon: Receipt },
   { label: "Estimates", href: ROUTES.estimates, icon: Calculator },
   { label: "Customers", href: ROUTES.customers, icon: Users },
   { label: "Templates", href: ROUTES.templates, icon: LayoutTemplate },

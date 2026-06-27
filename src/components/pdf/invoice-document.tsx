@@ -77,7 +77,7 @@ export const InvoiceDocument = React.forwardRef<
         <div className="mt-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h2 className="text-3xl font-extrabold tracking-tight text-blue-700">
-              INVOICE
+              INVOICE / BILL
             </h2>
             <span
               className="rounded-full px-3 py-1 text-xs font-bold uppercase text-white"

@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CompanyForm } from "@/components/forms/company-form";
 import { PreferencesForm } from "@/components/forms/preferences-form";
 import { BackupRestore } from "@/components/forms/backup-restore";
+import { CloudAccount } from "@/components/forms/cloud-account";
 import { useCompany, useSettings } from "@/hooks";
 
 export default function SettingsPage() {
@@ -53,7 +54,8 @@ export default function SettingsPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="data">
+        <TabsContent value="data" className="space-y-6">
+          <CloudAccount />
           <BackupRestore />
         </TabsContent>
       </Tabs>

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { bootstrapDatabase } from "@/db";
+import { isSupabaseConfigured } from "@/lib/supabase";
 
 interface DbContextValue {
   ready: boolean;
@@ -15,14 +16,20 @@ export function useDbReady(): boolean {
 }
 
 /**
- * Bootstraps IndexedDB (seeds defaults & templates) on first client render.
- * Renders children immediately; data hooks handle their own loading states.
+ * Initializes IndexedDB. In offline-only mode it also seeds defaults/templates.
+ * When cloud sync is configured, seeding is deferred to SyncGate (after the
+ * initial cloud pull) so seed data isn't duplicated across devices.
  */
 export function DbProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
     let cancelled = false;
+    // Cloud mode bootstraps inside SyncGate (post-pull); skip here.
+    if (isSupabaseConfigured) {
+      setReady(true);
+      return;
+    }
     bootstrapDatabase()
       .catch((err) => console.error("DB bootstrap failed:", err))
       .finally(() => {

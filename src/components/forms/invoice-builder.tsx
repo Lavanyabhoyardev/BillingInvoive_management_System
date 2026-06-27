@@ -86,7 +86,9 @@ export function InvoiceBuilder({
       if (existing) {
         await invoiceService.update(existing.id, payload);
         form.setDirty(false);
-        toast.success(status === "final" ? "Invoice saved." : "Draft updated.");
+        toast.success(
+          status === "final" ? "Invoice / Bill saved." : "Draft updated."
+        );
         router.push(
           status === "final"
             ? `${ROUTES.invoices}/${existing.id}`
@@ -101,7 +103,9 @@ export function InvoiceBuilder({
         paidAmount: payload.paidAmount,
       });
       form.setDirty(false);
-      toast.success(status === "final" ? "Invoice created." : "Draft saved.");
+      toast.success(
+        status === "final" ? "Invoice / Bill created." : "Draft saved."
+      );
       router.push(
         status === "final"
           ? `${ROUTES.invoices}/${created.id}`
@@ -117,7 +121,7 @@ export function InvoiceBuilder({
 
   async function handleClear() {
     const ok = await confirm({
-      title: "Clear this invoice?",
+      title: "Clear this invoice / bill?",
       description: "All entered details will be discarded.",
       confirmLabel: "Clear",
       destructive: true,
@@ -193,7 +197,7 @@ export function InvoiceBuilder({
         className="sticky bottom-4 z-10 flex flex-wrap items-center gap-2 rounded-xl border bg-card/90 p-3 shadow-lg backdrop-blur"
       >
         <span className="mr-auto pl-2 text-sm text-muted-foreground">
-          {form.state.invoiceNumber || "New invoice"}
+          {form.state.invoiceNumber || "New invoice / bill"}
         </span>
         <Button variant="outline" onClick={() => save("draft")} disabled={busy}>
           <Save className="h-4 w-4" />
@@ -202,7 +206,7 @@ export function InvoiceBuilder({
         <Button onClick={() => save("final")} disabled={busy}>
           <FileCheck2 className="h-4 w-4" />
           {existing && existing.status === "final"
-            ? "Save Invoice"
+            ? "Save Invoice / Bill"
             : "Save & Generate"}
         </Button>
       </motion.div>

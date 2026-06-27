@@ -78,7 +78,7 @@ export default function CustomersPage() {
                 <TableRow className="bg-muted/50 hover:bg-muted/50">
                   <TableHead>Customer</TableHead>
                   <TableHead className="text-center">Quotations</TableHead>
-                  <TableHead className="text-center">Invoices</TableHead>
+                  <TableHead className="text-center">Invoices / Bills</TableHead>
                   <TableHead className="text-right">Pending</TableHead>
                   <TableHead>Last Service</TableHead>
                 </TableRow>
@@ -149,7 +149,7 @@ export default function CustomersPage() {
                     </span>
                   ) : null}
                   <span>{c.totalQuotations} quotations</span>
-                  <span>{c.totalInvoices} invoices</span>
+                  <span>{c.totalInvoices} invoices / bills</span>
                 </div>
               </Link>
             ))}

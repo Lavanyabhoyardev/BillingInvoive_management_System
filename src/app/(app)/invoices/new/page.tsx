@@ -27,7 +27,7 @@ export default function NewInvoicePage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="New Invoice"
+        title="New Invoice / Bill"
         description="Generate a bill. Customer pays now or later — track payment status."
       />
       {ready ? (

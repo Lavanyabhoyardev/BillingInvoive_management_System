@@ -30,11 +30,11 @@ export default function EditInvoicePage() {
     return (
       <EmptyState
         icon={FileWarning}
-        title="Invoice not found"
+        title="Invoice / Bill not found"
         description="It may have been deleted."
         action={
           <Button onClick={() => router.push(ROUTES.invoices)}>
-            Back to Invoices
+            Back to Invoices / Bills
           </Button>
         }
       />

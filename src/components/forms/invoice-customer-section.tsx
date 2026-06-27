@@ -22,7 +22,7 @@ export function InvoiceCustomerSection({ form }: { form: InvoiceFormApi }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <User className="h-4 w-4 text-primary" />
-          Customer & Invoice Details
+          Customer & Invoice / Bill Details
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -66,7 +66,7 @@ export function InvoiceCustomerSection({ form }: { form: InvoiceFormApi }) {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3">
-          <FormField label="Invoice No." htmlFor="inv-number">
+          <FormField label="Invoice / Bill No." htmlFor="inv-number">
             <Input
               id="inv-number"
               value={state.invoiceNumber}
@@ -74,7 +74,7 @@ export function InvoiceCustomerSection({ form }: { form: InvoiceFormApi }) {
               className="font-medium"
             />
           </FormField>
-          <FormField label="Invoice Date" htmlFor="inv-date">
+          <FormField label="Invoice / Bill Date" htmlFor="inv-date">
             <Input
               id="inv-date"
               type="date"

@@ -24,19 +24,19 @@ export function InvoiceRowActions({ invoice }: { invoice: Invoice }) {
 
   async function handleDelete() {
     const ok = await confirm({
-      title: "Delete this invoice?",
+      title: "Delete this invoice / bill?",
       description: `${invoice.invoiceNumber} will be permanently removed.`,
       confirmLabel: "Delete",
       destructive: true,
     });
     if (!ok) return;
     await invoiceService.remove(invoice.id);
-    toast.success("Invoice deleted.");
+    toast.success("Invoice / Bill deleted.");
   }
 
   async function handleDuplicate() {
     const copy = await invoiceService.duplicate(invoice.id);
-    toast.success("Invoice duplicated.");
+    toast.success("Invoice / Bill duplicated.");
     router.push(`${ROUTES.invoices}/${copy.id}/edit`);
   }
 

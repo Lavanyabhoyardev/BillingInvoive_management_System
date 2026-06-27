@@ -39,13 +39,13 @@ export default function InvoicesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Invoices"
+        title="Invoices / Bills"
         description="Generate and track bills. Filter by date and search instantly."
         actions={
           <Button asChild>
             <Link href={ROUTES.newInvoice}>
               <Plus className="h-4 w-4" />
-              New Invoice
+              New Invoice / Bill
             </Link>
           </Button>
         }
@@ -63,7 +63,7 @@ export default function InvoicesPage() {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search by customer, phone, invoice number or date…"
+          placeholder="Search by customer, phone, invoice / bill number or date…"
           className="sm:max-w-md"
         />
       </div>
@@ -71,17 +71,21 @@ export default function InvoicesPage() {
       {showEmpty ? (
         <EmptyState
           icon={Receipt}
-          title={search || preset !== "all" ? "No invoices found" : "No invoices yet"}
+          title={
+            search || preset !== "all"
+              ? "No invoices / bills found"
+              : "No invoices / bills yet"
+          }
           description={
             search || preset !== "all"
               ? "Try a different search or date range."
-              : "Create your first invoice, or convert a quotation into one."
+              : "Create your first invoice / bill, or convert a quotation into one."
           }
           action={
             <Button asChild>
               <Link href={ROUTES.newInvoice}>
                 <Plus className="h-4 w-4" />
-                New Invoice
+                New Invoice / Bill
               </Link>
             </Button>
           }

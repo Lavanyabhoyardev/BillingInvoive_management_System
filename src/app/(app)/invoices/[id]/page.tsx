@@ -41,11 +41,11 @@ export default function InvoiceDetailPage() {
     return (
       <EmptyState
         icon={FileWarning}
-        title="Invoice not found"
+        title="Invoice / Bill not found"
         description="It may have been deleted."
         action={
           <Button onClick={() => router.push(ROUTES.invoices)}>
-            Back to Invoices
+            Back to Invoices / Bills
           </Button>
         }
       />
@@ -56,20 +56,20 @@ export default function InvoiceDetailPage() {
 
   async function handleDelete() {
     const ok = await confirm({
-      title: "Delete this invoice?",
+      title: "Delete this invoice / bill?",
       description: `${invoice!.invoiceNumber} will be permanently removed.`,
       confirmLabel: "Delete",
       destructive: true,
     });
     if (!ok) return;
     await invoiceService.remove(invoice!.id);
-    toast.success("Invoice deleted.");
+    toast.success("Invoice / Bill deleted.");
     router.push(ROUTES.invoices);
   }
 
   async function handleDuplicate() {
     const copy = await invoiceService.duplicate(invoice!.id);
-    toast.success("Invoice duplicated.");
+    toast.success("Invoice / Bill duplicated.");
     router.push(`${ROUTES.invoices}/${copy.id}/edit`);
   }
 
@@ -128,7 +128,7 @@ export default function InvoiceDetailPage() {
             filename={`${invoice.invoiceNumber}-${invoice.customer.name}`}
           />
           <ShareButtons
-            docLabel="Invoice"
+            docLabel="Invoice / Bill"
             number={invoice.invoiceNumber}
             customerName={invoice.customer.name}
             customerPhone={invoice.customer.phone}

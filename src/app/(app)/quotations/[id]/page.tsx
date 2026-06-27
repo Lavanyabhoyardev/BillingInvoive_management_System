@@ -65,7 +65,7 @@ export default function QuotationDetailPage() {
 
   async function handleConvertToInvoice() {
     const invoice = await invoiceService.createFromQuotation(quotation!);
-    toast.success("Invoice created from quotation.");
+    toast.success("Invoice / Bill created from quotation.");
     router.push(`${ROUTES.invoices}/${invoice.id}`);
   }
 
@@ -114,7 +114,7 @@ export default function QuotationDetailPage() {
             )}
             <Button onClick={handleConvertToInvoice}>
               <Receipt className="h-4 w-4" />
-              Convert to Invoice
+              Convert to Invoice / Bill
             </Button>
           </div>
         </div>
