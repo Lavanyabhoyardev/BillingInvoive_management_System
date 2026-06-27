@@ -12,9 +12,17 @@ interface AuthContextValue {
   loading: boolean;
   user: User | null;
   session: Session | null;
+  /** True when the user arrived via a password-recovery email link. */
+  recovery: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  /** Sends a password-reset email with a link back to this app. */
+  sendPasswordReset: (email: string) => Promise<void>;
+  /** Sets a new password (used during recovery). */
+  updatePassword: (password: string) => Promise<void>;
+  /** Clears the recovery flag (after the password was changed). */
+  clearRecovery: () => void;
 }
 
 const AuthContext = React.createContext<AuthContextValue | null>(null);
@@ -32,6 +40,7 @@ export function useAuth(): AuthContextValue {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = React.useState<Session | null>(null);
   const [loading, setLoading] = React.useState(isSupabaseConfigured);
+  const [recovery, setRecovery] = React.useState(false);
 
   React.useEffect(() => {
     if (!isSupabaseConfigured) return;
@@ -44,8 +53,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession);
+      // Fired when the user opens the reset-password email link.
+      if (event === "PASSWORD_RECOVERY") setRecovery(true);
     });
 
     return () => subscription.unsubscribe();
@@ -56,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       enabled: isSupabaseConfigured,
       loading,
       session,
+      recovery,
       user: session?.user ?? null,
       async signIn(email, password) {
         const supabase = getSupabase();
@@ -74,8 +86,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const supabase = getSupabase();
         await supabase.auth.signOut();
       },
+      async sendPasswordReset(email) {
+        const supabase = getSupabase();
+        const redirectTo =
+          typeof window !== "undefined" ? window.location.origin : undefined;
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo,
+        });
+        if (error) throw error;
+      },
+      async updatePassword(password) {
+        const supabase = getSupabase();
+        const { error } = await supabase.auth.updateUser({ password });
+        if (error) throw error;
+      },
+      clearRecovery() {
+        setRecovery(false);
+      },
     }),
-    [loading, session]
+    [loading, session, recovery]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

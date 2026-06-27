@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 
 import { useAuth } from "./auth-provider";
 import { LoginScreen } from "@/components/auth/login-screen";
+import { ResetPasswordScreen } from "@/components/auth/reset-password-screen";
 import { bootstrapDatabase } from "@/db";
 import { startSync, stopSync } from "@/lib/supabase";
 
@@ -23,11 +24,13 @@ function FullScreen({ label }: { label: string }) {
  * app immediately (offline-only mode — unchanged behavior).
  */
 export function SyncGate({ children }: { children: React.ReactNode }) {
-  const { enabled, loading, user } = useAuth();
+  const { enabled, loading, user, recovery } = useAuth();
   const [syncReady, setSyncReady] = React.useState(!enabled);
 
   React.useEffect(() => {
     if (!enabled) return;
+    // During password recovery, don't sync or load the app yet.
+    if (recovery) return;
     if (!user) {
       stopSync();
       setSyncReady(false);
@@ -49,10 +52,11 @@ export function SyncGate({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [enabled, user?.id]);
+  }, [enabled, user?.id, recovery]);
 
   if (!enabled) return <>{children}</>;
   if (loading) return <FullScreen label="Loading…" />;
+  if (recovery) return <ResetPasswordScreen />;
   if (!user) return <LoginScreen />;
   if (!syncReady) return <FullScreen label="Syncing your data…" />;
   return <>{children}</>;
