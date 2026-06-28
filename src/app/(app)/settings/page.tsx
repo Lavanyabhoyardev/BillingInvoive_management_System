@@ -23,20 +23,22 @@ export default function SettingsPage() {
       />
 
       <Tabs defaultValue="company" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="company" className="gap-2">
-            <Building2 className="h-4 w-4" />
-            Company Profile
-          </TabsTrigger>
-          <TabsTrigger value="preferences" className="gap-2">
-            <SlidersHorizontal className="h-4 w-4" />
-            Preferences
-          </TabsTrigger>
-          <TabsTrigger value="data" className="gap-2">
-            <DatabaseBackup className="h-4 w-4" />
-            Backup & Data
-          </TabsTrigger>
-        </TabsList>
+        <div className="-mx-1 overflow-x-auto px-1">
+          <TabsList className="w-max">
+            <TabsTrigger value="company" className="gap-2">
+              <Building2 className="h-4 w-4" />
+              Company Profile
+            </TabsTrigger>
+            <TabsTrigger value="preferences" className="gap-2">
+              <SlidersHorizontal className="h-4 w-4" />
+              Preferences
+            </TabsTrigger>
+            <TabsTrigger value="data" className="gap-2">
+              <DatabaseBackup className="h-4 w-4" />
+              Backup & Data
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="company">
           {companyLoading ? (

@@ -1,66 +1,32 @@
-/* Lightweight offline service worker.
- * Strategy:
- *   - Navigations: network-first, falling back to cached shell when offline.
- *   - Same-origin assets (JS/CSS/fonts/images): stale-while-revalidate.
- * This makes the app load fully offline after the first visit. All business
- * data already lives in IndexedDB, so no API caching is needed.
+/* Self-destructing service worker.
+ *
+ * Earlier versions cached the app shell for offline use, but on mobile that
+ * could serve a stale JavaScript bundle after a redeploy — which made buttons
+ * and links stop responding (handlers attached to outdated code). Since the app
+ * now relies on cloud sync (online), we remove the service worker entirely.
+ *
+ * The browser automatically checks /sw.js on navigation; this version takes
+ * over, wipes all caches, unregisters itself, and reloads open tabs with fresh
+ * content. After that, no service worker controls the app.
  */
-const CACHE = "quotedesk-v2";
-const OFFLINE_URLS = ["/"];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(OFFLINE_URLS))
-  );
+self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-      )
-  );
-  self.clients.claim();
-});
-
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  if (request.method !== "GET") return;
-
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
-
-  // Navigations: network-first with offline fallback to the cached shell.
-  if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put(request, copy));
-          return response;
-        })
-        .catch(async () => {
-          const cached = await caches.match(request);
-          return cached || caches.match("/");
-        })
-    );
-    return;
-  }
-
-  // Assets: stale-while-revalidate.
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      const network = fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put(request, copy));
-          return response;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
+    (async () => {
+      try {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((key) => caches.delete(key)));
+      } catch {
+        /* ignore */
+      }
+      await self.registration.unregister();
+      const clients = await self.clients.matchAll({ type: "window" });
+      for (const client of clients) {
+        client.navigate(client.url);
+      }
+    })()
   );
 });
