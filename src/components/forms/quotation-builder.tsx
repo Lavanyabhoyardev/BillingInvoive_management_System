@@ -67,6 +67,7 @@ function toPayload(state: QuotationFormState, status: QuotationStatus) {
       .filter((i) => i.name.trim())
       .map((i) => ({ ...i, name: i.name.trim() })),
     charges: state.charges,
+    includeCharges: state.includeCharges,
     discount: state.discount,
     gstPercent: state.gstPercent,
     notes: state.notes.trim() || undefined,
@@ -226,10 +227,12 @@ export function QuotationBuilder({
 
           <ChargesSection
             charges={form.state.charges}
+            includeCharges={form.state.includeCharges}
             discount={form.state.discount}
             gstPercent={form.state.gstPercent}
             currencySymbol={symbol}
             onCharge={form.setCharge}
+            onIncludeChange={(v) => form.patch({ includeCharges: v })}
             onDiscount={(v) => form.patch({ discount: v })}
             onGst={(v) => form.patch({ gstPercent: v })}
           />

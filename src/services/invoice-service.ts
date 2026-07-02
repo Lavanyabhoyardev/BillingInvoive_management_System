@@ -36,6 +36,7 @@ function withFreshTotals(inv: Invoice): Invoice {
       charges: inv.charges,
       discount: inv.discount,
       gstPercent: inv.gstPercent,
+      includeCharges: inv.includeCharges,
     }),
   };
 }

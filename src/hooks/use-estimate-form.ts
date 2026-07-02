@@ -18,6 +18,7 @@ export interface EstimateFormState {
   date: string;
   items: QuotationItem[];
   charges: AdditionalCharges;
+  includeCharges: boolean;
   discount: number;
   gstPercent: number;
   notes: string;
@@ -36,6 +37,7 @@ function createInitialState(opts: InitOptions = {}): EstimateFormState {
     date: todayISO(),
     items: [createEmptyItem()],
     charges: { ...EMPTY_CHARGES },
+    includeCharges: true,
     discount: 0,
     gstPercent: opts.gstPercent ?? 0,
     notes: "",
@@ -50,6 +52,7 @@ function fromEstimate(est: Estimate): EstimateFormState {
     date: est.date,
     items: est.items.length ? est.items.map((i) => ({ ...i })) : [createEmptyItem()],
     charges: { ...est.charges },
+    includeCharges: est.includeCharges !== false,
     discount: est.discount,
     gstPercent: est.gstPercent,
     notes: est.notes ?? "",
@@ -138,8 +141,15 @@ export function useEstimateForm(existing?: Estimate, init?: InitOptions) {
         charges: state.charges,
         discount: state.discount,
         gstPercent: state.gstPercent,
+        includeCharges: state.includeCharges,
       }),
-    [state.items, state.charges, state.discount, state.gstPercent]
+    [
+      state.items,
+      state.charges,
+      state.discount,
+      state.gstPercent,
+      state.includeCharges,
+    ]
   );
 
   return {

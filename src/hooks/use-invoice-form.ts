@@ -22,6 +22,7 @@ export interface InvoiceFormState {
   customer: InvoiceCustomer;
   items: QuotationItem[];
   charges: AdditionalCharges;
+  includeCharges: boolean;
   discount: number;
   gstPercent: number;
   notes: string;
@@ -45,6 +46,7 @@ function createInitialState(opts: InitOptions = {}): InvoiceFormState {
     customer: { name: "", phone: "", address: "", gstNumber: "" },
     items: [createEmptyItem()],
     charges: { ...EMPTY_CHARGES },
+    includeCharges: true,
     discount: 0,
     gstPercent: opts.gstPercent ?? 18,
     notes: "",
@@ -62,6 +64,7 @@ function fromInvoice(inv: Invoice): InvoiceFormState {
     customer: { ...inv.customer },
     items: inv.items.length ? inv.items.map((i) => ({ ...i })) : [createEmptyItem()],
     charges: { ...inv.charges },
+    includeCharges: inv.includeCharges !== false,
     discount: inv.discount,
     gstPercent: inv.gstPercent,
     notes: inv.notes ?? "",
@@ -164,8 +167,15 @@ export function useInvoiceForm(existing?: Invoice, init?: InitOptions) {
         charges: state.charges,
         discount: state.discount,
         gstPercent: state.gstPercent,
+        includeCharges: state.includeCharges,
       }),
-    [state.items, state.charges, state.discount, state.gstPercent]
+    [
+      state.items,
+      state.charges,
+      state.discount,
+      state.gstPercent,
+      state.includeCharges,
+    ]
   );
 
   return {

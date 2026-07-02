@@ -21,6 +21,7 @@ function withFreshTotals(q: Quotation): Quotation {
       charges: q.charges,
       discount: q.discount,
       gstPercent: q.gstPercent,
+      includeCharges: q.includeCharges,
     }),
   };
 }

@@ -33,9 +33,9 @@ export const QuotationDocument = React.forwardRef<
       className="mx-auto w-[794px] bg-white font-sans text-slate-800"
       style={{ minHeight: "1123px" }}
     >
-      <div className="flex flex-col p-10">
+      <div className="flex flex-col p-8">
         {/* ===== Header ===== */}
-        <header className="flex items-start justify-between gap-6 border-b-2 border-blue-600 pb-6">
+        <header className="flex items-start justify-between gap-6 border-b-2 border-blue-600 pb-4">
           <div className="flex items-center gap-4">
             {company?.logo ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -67,7 +67,7 @@ export const QuotationDocument = React.forwardRef<
         </header>
 
         {/* ===== Title band ===== */}
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-4 flex items-center justify-between">
           <h2 className="text-3xl font-extrabold tracking-tight text-blue-700">
             QUOTATION
           </h2>
@@ -85,7 +85,7 @@ export const QuotationDocument = React.forwardRef<
         </div>
 
         {/* ===== Bill To ===== */}
-        <section className="mt-6 rounded-lg bg-slate-50 p-4">
+        <section className="mt-4 rounded-lg bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
             Bill To
           </p>
@@ -101,20 +101,20 @@ export const QuotationDocument = React.forwardRef<
         </section>
 
         {/* ===== Items table ===== */}
-        <section className="mt-6">
+        <section className="mt-4">
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="bg-blue-600 text-left text-white">
-                <th className="w-8 rounded-l-md px-2 py-2.5 text-center font-semibold">
+                <th className="w-8 rounded-l-md px-2 py-2 text-center font-semibold">
                   #
                 </th>
-                <th className="px-3 py-2.5 font-semibold">Item & Description</th>
-                <th className="w-14 px-2 py-2.5 text-right font-semibold">Qty</th>
-                <th className="w-16 px-2 py-2.5 font-semibold">Unit</th>
-                <th className="w-24 px-3 py-2.5 text-right font-semibold">
+                <th className="px-3 py-2 font-semibold">Item & Description</th>
+                <th className="w-14 px-2 py-2 text-right font-semibold">Qty</th>
+                <th className="w-16 px-2 py-2 font-semibold">Unit</th>
+                <th className="w-24 px-3 py-2 text-right font-semibold">
                   Price
                 </th>
-                <th className="w-28 rounded-r-md px-3 py-2.5 text-right font-semibold">
+                <th className="w-28 rounded-r-md px-3 py-2 text-right font-semibold">
                   Amount
                 </th>
               </tr>
@@ -125,10 +125,10 @@ export const QuotationDocument = React.forwardRef<
                   key={item.id}
                   className="border-b border-slate-100 align-top"
                 >
-                  <td className="px-2 py-2.5 text-center text-slate-400">
+                  <td className="px-2 py-2 text-center text-slate-400">
                     {index + 1}
                   </td>
-                  <td className="px-3 py-2.5">
+                  <td className="px-3 py-2">
                     <p className="font-medium text-slate-900">{item.name}</p>
                     {item.description ? (
                       <p className="mt-0.5 text-xs text-slate-500">
@@ -136,14 +136,14 @@ export const QuotationDocument = React.forwardRef<
                       </p>
                     ) : null}
                   </td>
-                  <td className="px-2 py-2.5 text-right tabular-nums">
+                  <td className="px-2 py-2 text-right tabular-nums">
                     {item.quantity}
                   </td>
-                  <td className="px-2 py-2.5 text-slate-600">{item.unit}</td>
-                  <td className="px-3 py-2.5 text-right tabular-nums">
+                  <td className="px-2 py-2 text-slate-600">{item.unit}</td>
+                  <td className="px-3 py-2 text-right tabular-nums">
                     {formatCurrency(item.price, sym)}
                   </td>
-                  <td className="px-3 py-2.5 text-right font-medium tabular-nums">
+                  <td className="px-3 py-2 text-right font-medium tabular-nums">
                     {formatCurrency(item.amount, sym)}
                   </td>
                 </tr>
@@ -153,7 +153,7 @@ export const QuotationDocument = React.forwardRef<
         </section>
 
         {/* ===== Totals ===== */}
-        <section className="mt-6 flex justify-end">
+        <section className="mt-4 flex justify-end">
           <div className="w-72 space-y-1.5 text-sm">
             <Row label="Subtotal" value={formatCurrency(totals.subtotal, sym)} />
             {totals.chargesTotal > 0 ? (
@@ -172,7 +172,7 @@ export const QuotationDocument = React.forwardRef<
               label={`GST (${quotation.gstPercent}%)`}
               value={formatCurrency(totals.gstAmount, sym)}
             />
-            <div className="mt-2 flex items-center justify-between rounded-md bg-blue-600 px-3 py-2.5 text-white">
+            <div className="mt-2 flex items-center justify-between rounded-md bg-blue-600 px-3 py-2 text-white">
               <span className="font-semibold">Grand Total</span>
               <span className="text-lg font-bold tabular-nums">
                 {formatCurrency(totals.grandTotal, sym)}
@@ -182,7 +182,7 @@ export const QuotationDocument = React.forwardRef<
         </section>
 
         {/* ===== Amount in words ===== */}
-        <section className="mt-4 rounded-md border border-slate-200 px-4 py-2.5">
+        <section className="mt-4 rounded-md border border-slate-200 px-4 py-2">
           <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
             Amount in words:{" "}
           </span>
@@ -221,7 +221,7 @@ export const QuotationDocument = React.forwardRef<
         ) : null}
 
         {/* ===== Terms + Payment ===== */}
-        <section className="mt-6 grid grid-cols-2 gap-6">
+        <section className="mt-4 grid grid-cols-2 gap-6">
           <div>
             {company?.termsAndConditions ? (
               <>
@@ -277,7 +277,7 @@ export const QuotationDocument = React.forwardRef<
         </section>
 
         {/* ===== Footer ===== */}
-        <footer className="mt-8 border-t border-slate-200 pt-4 text-center">
+        <footer className="mt-5 border-t border-slate-200 pt-4 text-center">
           <p className="text-sm font-semibold text-blue-700">
             Thank you for your business!
           </p>

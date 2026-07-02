@@ -19,6 +19,7 @@ function withFreshTotals(est: Estimate): Estimate {
       charges: est.charges,
       discount: est.discount,
       gstPercent: est.gstPercent,
+      includeCharges: est.includeCharges,
     }),
   };
 }

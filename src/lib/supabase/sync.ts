@@ -1,4 +1,4 @@
-import type { Table } from "dexie";
+import Dexie, { type Table } from "dexie";
 
 import { getDb, type QuotationDatabase } from "@/db";
 import { getSupabase, SYNCED_TABLES, type SyncedTable } from "./client";
@@ -86,7 +86,15 @@ function attachHooks(): void {
 
     table.hook("updating", (mods, _pk, obj) => {
       if (!applyingRemote && currentUserId) {
-        const next = { ...(obj as SyncRecord), ...(mods as object) } as SyncRecord;
+        // `mods` uses dot-notation key paths (e.g. "charges.serviceCharge").
+        // Spreading it onto `obj` would create bogus literal keys and leave
+        // the real nested value stale — which then echoed back over Realtime
+        // and reverted the just-saved edit. Apply each mod by its key path so
+        // the pushed record reflects the actual new state.
+        const next = Dexie.deepClone(obj) as SyncRecord;
+        for (const [keyPath, value] of Object.entries(mods as object)) {
+          Dexie.setByKeyPath(next, keyPath, value);
+        }
         void pushRecord(name, next);
       }
     });

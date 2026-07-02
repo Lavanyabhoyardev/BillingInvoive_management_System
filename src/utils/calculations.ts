@@ -37,6 +37,11 @@ export interface CalculateTotalsInput {
   charges: AdditionalCharges;
   discount: number;
   gstPercent: number;
+  /**
+   * When `false`, additional charges are excluded from the total (and therefore
+   * hidden on the printed document). Defaults to `true` for backward compat.
+   */
+  includeCharges?: boolean;
 }
 
 /**
@@ -54,7 +59,8 @@ export function calculateTotals(
   currencyName = "Rupees"
 ): QuotationTotals {
   const subtotal = sumItems(input.items);
-  const chargesTotal = sumCharges(input.charges);
+  const chargesTotal =
+    input.includeCharges === false ? 0 : sumCharges(input.charges);
   const discount = round2(Math.max(0, input.discount || 0));
 
   const taxableAmount = round2(Math.max(0, subtotal + chargesTotal - discount));

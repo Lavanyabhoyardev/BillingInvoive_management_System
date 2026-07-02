@@ -121,7 +121,14 @@ async function captureCanvas(
   }
 }
 
-/** Exports the element as a multi-page A4 PDF and triggers download. */
+/**
+ * Exports the element as a SINGLE-page A4 PDF and triggers download.
+ *
+ * The document is always fit onto one page: it fills the full A4 width, and if
+ * the content is taller than one page it is scaled down (keeping aspect ratio)
+ * so it still fits on a single sheet. This guarantees a quotation/estimate/bill
+ * never spills onto a second page, no matter how many items it has.
+ */
 export async function exportToPdf(
   element: HTMLElement,
   filename: string
@@ -130,23 +137,19 @@ export async function exportToPdf(
   const imgData = canvas.toDataURL("image/jpeg", 0.95);
 
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
-  const imgWidth = A4_MM.width;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  let heightLeft = imgHeight;
-  let position = 0;
-
-  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-  heightLeft -= A4_MM.height;
-
-  // Add extra pages if the content overflows one A4 page.
-  while (heightLeft > 0) {
-    position -= A4_MM.height;
-    pdf.addPage();
-    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-    heightLeft -= A4_MM.height;
+  // Fit to width first; if that overflows the page height, fit to height.
+  let renderWidth = A4_MM.width;
+  let renderHeight = (canvas.height * renderWidth) / canvas.width;
+  if (renderHeight > A4_MM.height) {
+    renderHeight = A4_MM.height;
+    renderWidth = (canvas.width * renderHeight) / canvas.height;
   }
 
+  // Centre horizontally when the width was reduced to fit the height.
+  const offsetX = (A4_MM.width - renderWidth) / 2;
+
+  pdf.addImage(imgData, "JPEG", offsetX, 0, renderWidth, renderHeight);
   pdf.save(`${slugify(filename) || "document"}.pdf`);
 }
 

@@ -43,6 +43,7 @@ function createInitialState(opts: InitOptions = {}): QuotationFormState {
     customer: { name: "", phone: "", address: "" },
     items: [createEmptyItem()],
     charges: { ...EMPTY_CHARGES },
+    includeCharges: true,
     discount: 0,
     gstPercent: opts.gstPercent ?? 18,
     notes: "",
@@ -58,6 +59,7 @@ function fromQuotation(q: Quotation): QuotationFormState {
     customer: { ...q.customer },
     items: q.items.length ? q.items.map((i) => ({ ...i })) : [createEmptyItem()],
     charges: { ...q.charges },
+    includeCharges: q.includeCharges !== false,
     discount: q.discount,
     gstPercent: q.gstPercent,
     notes: q.notes ?? "",
@@ -189,8 +191,15 @@ export function useQuotationForm(existing?: Quotation, init?: InitOptions) {
         charges: state.charges,
         discount: state.discount,
         gstPercent: state.gstPercent,
+        includeCharges: state.includeCharges,
       }),
-    [state.items, state.charges, state.discount, state.gstPercent]
+    [
+      state.items,
+      state.charges,
+      state.discount,
+      state.gstPercent,
+      state.includeCharges,
+    ]
   );
 
   return {

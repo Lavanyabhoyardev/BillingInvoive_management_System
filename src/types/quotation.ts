@@ -81,6 +81,8 @@ export interface Quotation extends BaseEntity {
   customer: CustomerDetails;
   items: QuotationItem[];
   charges: AdditionalCharges;
+  /** When false, additional charges are excluded from totals and hidden on the PDF. Defaults to true. */
+  includeCharges?: boolean;
   discount: number; // absolute currency amount
   gstPercent: number;
 

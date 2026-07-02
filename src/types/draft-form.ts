@@ -16,6 +16,7 @@ export interface QuotationFormState {
   customer: CustomerDetails;
   items: QuotationItem[];
   charges: AdditionalCharges;
+  includeCharges: boolean;
   discount: number;
   gstPercent: number;
   notes: string;

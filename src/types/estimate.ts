@@ -20,6 +20,8 @@ export interface Estimate extends BaseEntity {
 
   items: QuotationItem[];
   charges: AdditionalCharges;
+  /** When false, additional charges are excluded from totals and hidden on the PDF. Defaults to true. */
+  includeCharges?: boolean;
   discount: number;
   gstPercent: number;
   notes?: string;
