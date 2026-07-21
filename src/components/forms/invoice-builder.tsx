@@ -54,6 +54,7 @@ function toPayload(state: InvoiceFormState, status: InvoiceStatus) {
     notes: state.notes.trim() || undefined,
     paymentStatus: state.paymentStatus,
     paymentMethod: state.paymentMethod,
+    showPayment: state.showPayment,
     paidAmount:
       state.paymentStatus === "partial" ? state.paidAmount : 0,
   };

@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Copy, Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  Copy,
+  Eye,
+  MoreHorizontal,
+  Pencil,
+  Receipt,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -24,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useConfirm } from "@/components/shared/confirm-dialog";
-import { estimateService } from "@/services";
+import { estimateService, invoiceService } from "@/services";
 import { formatCurrency, formatDate } from "@/utils";
 import { ROUTES } from "@/lib/constants";
 import type { Estimate } from "@/types";
@@ -57,6 +64,12 @@ function RowActions({ estimate }: { estimate: Estimate }) {
     router.push(`${ROUTES.estimates}/${copy.id}/edit`);
   }
 
+  async function handleConvertToInvoice() {
+    const invoice = await invoiceService.createFromEstimate(estimate);
+    toast.success("Bill created — add the customer details and save.");
+    router.push(`${ROUTES.invoices}/${invoice.id}/edit`);
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -81,6 +94,10 @@ function RowActions({ estimate }: { estimate: Estimate }) {
           <DropdownMenuItem onClick={handleDuplicate}>
             <Copy className="h-4 w-4" />
             Duplicate
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleConvertToInvoice}>
+            <Receipt className="h-4 w-4" />
+            Convert to Bill
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

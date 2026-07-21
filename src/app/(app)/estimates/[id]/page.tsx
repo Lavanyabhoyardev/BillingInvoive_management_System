@@ -2,7 +2,14 @@
 
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Copy, FileWarning, Pencil, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Copy,
+  FileWarning,
+  Pencil,
+  Receipt,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +21,7 @@ import { ExportToolbar } from "@/components/pdf/export-toolbar";
 import { ShareButtons } from "@/components/pdf/share-buttons";
 import { useConfirm } from "@/components/shared/confirm-dialog";
 import { useCompany, useEstimate, useSettings } from "@/hooks";
-import { estimateService } from "@/services";
+import { estimateService, invoiceService } from "@/services";
 import { ROUTES } from "@/lib/constants";
 
 export default function EstimateDetailPage() {
@@ -72,6 +79,13 @@ export default function EstimateDetailPage() {
     router.push(`${ROUTES.estimates}/${copy.id}/edit`);
   }
 
+  /** Turns this estimate into a bill/invoice draft and opens it for editing. */
+  async function handleConvertToInvoice() {
+    const invoice = await invoiceService.createFromEstimate(estimate!);
+    toast.success("Bill created — add the customer details and save.");
+    router.push(`${ROUTES.invoices}/${invoice.id}/edit`);
+  }
+
   return (
     <div className="space-y-6">
       <div className="no-print space-y-4">
@@ -106,6 +120,10 @@ export default function EstimateDetailPage() {
             <Button variant="outline" onClick={handleDuplicate}>
               <Copy className="h-4 w-4" />
               Duplicate
+            </Button>
+            <Button onClick={handleConvertToInvoice}>
+              <Receipt className="h-4 w-4" />
+              Convert to Bill
             </Button>
             <Button
               variant="outline"

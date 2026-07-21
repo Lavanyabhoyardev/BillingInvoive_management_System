@@ -28,6 +28,7 @@ export interface InvoiceFormState {
   notes: string;
   paymentStatus: PaymentStatus;
   paymentMethod?: PaymentMethod;
+  showPayment: boolean;
   paidAmount: number;
 }
 
@@ -52,6 +53,7 @@ function createInitialState(opts: InitOptions = {}): InvoiceFormState {
     notes: "",
     paymentStatus: "unpaid",
     paymentMethod: undefined,
+    showPayment: true,
     paidAmount: 0,
   };
 }
@@ -70,6 +72,7 @@ function fromInvoice(inv: Invoice): InvoiceFormState {
     notes: inv.notes ?? "",
     paymentStatus: inv.paymentStatus,
     paymentMethod: inv.paymentMethod,
+    showPayment: inv.showPayment !== false,
     paidAmount: inv.paidAmount,
   };
 }

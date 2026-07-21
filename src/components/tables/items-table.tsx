@@ -43,17 +43,19 @@ export function ItemsTable({
 }: ItemsTableProps) {
   return (
     <div className="space-y-3">
-      {/* Desktop / tablet table */}
-      <div className="hidden overflow-hidden rounded-xl border md:block">
-        <table className="w-full text-sm">
+      {/* Desktop / tablet table.
+          `min-w` + horizontal scroll keeps the Item column a wide rectangle
+          instead of collapsing to a few characters on narrow screens. */}
+      <div className="hidden overflow-x-auto rounded-xl border md:block">
+        <table className="w-full min-w-[880px] text-sm">
           <thead className="bg-muted/60">
             <tr className="text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               <th className="w-10 px-2 py-3" />
-              <th className="px-3 py-3">Item</th>
+              <th className="min-w-[280px] px-3 py-3">Item</th>
               <th className="w-20 px-3 py-3 text-right">Qty</th>
-              <th className="w-28 px-3 py-3">Unit</th>
-              <th className="w-32 px-3 py-3 text-right">Price</th>
-              <th className="w-32 px-3 py-3 text-right">Amount</th>
+              <th className="w-24 px-3 py-3">Unit</th>
+              <th className="w-28 px-3 py-3 text-right">Price</th>
+              <th className="w-28 px-3 py-3 text-right">Amount</th>
               <th className="w-20 px-2 py-3" />
             </tr>
           </thead>

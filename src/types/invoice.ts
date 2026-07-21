@@ -64,6 +64,8 @@ export interface Invoice extends BaseEntity {
 
   paymentStatus: PaymentStatus;
   paymentMethod?: PaymentMethod;
+  /** When false, payment status/method are hidden on the printed bill. Defaults to true. */
+  showPayment?: boolean;
   /** Amount paid so far (used when paymentStatus === "partial"). */
   paidAmount: number;
 

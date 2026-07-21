@@ -15,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 import { FormField } from "./form-field";
 import { NumberInput } from "./number-input";
 import { PAYMENT_METHODS, PAYMENT_STATUSES } from "@/types";
@@ -37,13 +39,28 @@ export function PaymentSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
-          <CreditCard className="h-4 w-4 text-primary" />
-          Payment
+        <CardTitle className="flex items-center justify-between gap-2 text-base">
+          <span className="flex items-center gap-2">
+            <CreditCard className="h-4 w-4 text-primary" />
+            Payment
+          </span>
+          <label className="flex cursor-pointer items-center gap-2 text-xs font-normal text-muted-foreground">
+            {state.showPayment ? "Shown on bill" : "Hidden from bill"}
+            <Switch
+              checked={state.showPayment}
+              onCheckedChange={(v) => patch({ showPayment: v })}
+              aria-label="Show payment details on the bill"
+            />
+          </label>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div
+          className={cn(
+            "grid gap-4 sm:grid-cols-2",
+            !state.showPayment && "opacity-50"
+          )}
+        >
           <FormField label="Payment Status">
             <Select
               value={state.paymentStatus}

@@ -3,7 +3,12 @@
 import * as React from "react";
 
 import type { CompanyProfile, Invoice } from "@/types";
-import { effectivePaidAmount, invoiceBalance, PAYMENT_STATUSES } from "@/types";
+import {
+  effectivePaidAmount,
+  invoiceBalance,
+  PAYMENT_METHODS,
+  PAYMENT_STATUSES,
+} from "@/types";
 import { formatCurrency, formatDate } from "@/utils";
 
 interface InvoiceDocumentProps {
@@ -32,6 +37,11 @@ export const InvoiceDocument = React.forwardRef<
   const statusColor = STATUS_COLORS[invoice.paymentStatus] ?? "#64748b";
   const paid = effectivePaidAmount(invoice);
   const balance = invoiceBalance(invoice);
+  // Payment block is optional per bill (defaults to shown for older records).
+  const showPayment = invoice.showPayment !== false;
+  const methodLabel = PAYMENT_METHODS.find(
+    (m) => m.value === invoice.paymentMethod
+  )?.label;
 
   return (
     <div
@@ -79,12 +89,14 @@ export const InvoiceDocument = React.forwardRef<
             <h2 className="text-3xl font-extrabold tracking-tight text-blue-700">
               INVOICE / BILL
             </h2>
-            <span
-              className="rounded-full px-3 py-1 text-xs font-bold uppercase text-white"
-              style={{ backgroundColor: statusColor }}
-            >
-              {statusLabel}
-            </span>
+            {showPayment ? (
+              <span
+                className="rounded-full px-3 py-1 text-xs font-bold uppercase text-white"
+                style={{ backgroundColor: statusColor }}
+              >
+                {statusLabel}
+              </span>
+            ) : null}
           </div>
           <div className="text-right text-sm">
             <p className="font-semibold text-slate-900">
@@ -191,15 +203,23 @@ export const InvoiceDocument = React.forwardRef<
                 {formatCurrency(totals.grandTotal, sym)}
               </span>
             </div>
-            {invoice.paymentStatus === "partial" ? (
+            {showPayment ? (
               <>
-                <Row label="Paid" value={formatCurrency(paid, sym)} />
-                <div className="flex items-center justify-between px-3 font-semibold text-red-600">
-                  <span>Balance Due</span>
-                  <span className="tabular-nums">
-                    {formatCurrency(balance, sym)}
-                  </span>
-                </div>
+                <Row label="Payment Status" value={statusLabel} />
+                {methodLabel ? (
+                  <Row label="Payment Method" value={methodLabel} />
+                ) : null}
+                {invoice.paymentStatus === "partial" ? (
+                  <>
+                    <Row label="Paid" value={formatCurrency(paid, sym)} />
+                    <div className="flex items-center justify-between px-3 font-semibold text-red-600">
+                      <span>Balance Due</span>
+                      <span className="tabular-nums">
+                        {formatCurrency(balance, sym)}
+                      </span>
+                    </div>
+                  </>
+                ) : null}
               </>
             ) : null}
           </div>

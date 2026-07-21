@@ -1,5 +1,6 @@
 import { getDb } from "@/db";
 import type {
+  Estimate,
   Invoice,
   InvoiceStatus,
   PaymentStatus,
@@ -167,12 +168,44 @@ export const invoiceService = {
       customer: { ...quotation.customer },
       items: quotation.items.map((it) => ({ ...it, id: generateId() })),
       charges: { ...quotation.charges },
+      includeCharges: quotation.includeCharges,
       discount: quotation.discount,
       gstPercent: quotation.gstPercent,
       notes: quotation.notes,
       paymentStatus: "unpaid",
       paidAmount: 0,
       sourceQuotationId: quotation.id,
+    });
+  },
+
+  /**
+   * Creates a new bill from an estimate: copies items, charges and totals.
+   *
+   * An estimate carries no full customer record (only an optional name), so the
+   * bill is created as a DRAFT — the caller should open the editor so the user
+   * can complete the customer details before issuing it.
+   */
+  async createFromEstimate(estimate: Estimate): Promise<Invoice> {
+    const number = await settingsService.consumeNextInvoiceNumber();
+    const settings = await settingsService.get();
+    const today = new Date().toISOString().slice(0, 10);
+    const due = new Date();
+    due.setDate(due.getDate() + (settings.defaultDueDays ?? 7));
+
+    return this.create({
+      invoiceNumber: number,
+      status: "draft",
+      date: today,
+      dueDate: due.toISOString().slice(0, 10),
+      customer: { name: estimate.forName?.trim() || "", phone: "" },
+      items: estimate.items.map((it) => ({ ...it, id: generateId() })),
+      charges: { ...estimate.charges },
+      includeCharges: estimate.includeCharges,
+      discount: estimate.discount,
+      gstPercent: estimate.gstPercent,
+      notes: estimate.notes,
+      paymentStatus: "unpaid",
+      paidAmount: 0,
     });
   },
 
